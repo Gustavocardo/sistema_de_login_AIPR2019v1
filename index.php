@@ -7,12 +7,20 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
         <title>Sistema de Login TNX Systems</title>
+         <style>
+    #caixaCadastro,
+    #caixaRecuperarSenha,
+    #alerta{
+        display: none;
+    }
+
+    </style>
     </head>
 <body class="bg-dark">
     <main class="container mt-4">
      <!-- Conteúdo Principal --> 
 
-        <section class="row">
+        <section class="row mb-5">
             <div class="col-lg-4 offset-lg-4" id="alerta">
                 <div class="alert alert-success text-center">
                     <strong id="resultado">
@@ -23,7 +31,7 @@
         </section>
 
         <!-- Formulário de Login -->
-        <section class="row mb-5">
+        <section class="row">
             <div class="col-lg-4 offset-lg-4 bg-light rounded" id="caixaLogin">
                 <h2 class="text-center mt-2">Entrada no sistema</h2>
                 <form action="#" id="formLogin" class="p-2">
@@ -55,7 +63,7 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Entrar"
+                        <input type="submit" value="::Entrar::"
                         name="btnEntrar" id="btnEntrar"
                         class="btn btn-primary btn-block">
                     </div>
@@ -69,61 +77,109 @@
                 </form>
             </div>
         </section>
+        <br>
+        <!-- Formulário de Cadastro -->
 
-    <!-- Formulario de Cadastro -->
-    <selection class="row mb-5">
-            <div class="col-lg-4 offset-lg-4 bg-light rounded" id="caixaCadastro">
-            <h2 class="text-center">Cadastro de novo usuário</h2>
-            <from action="#" class="p-2" id="frmCadastro">
+        <section class="row mb-5">
+            <div class="col-lg-4 offset-4 bg-light rounded" id="caixaCadastro">
+            <h2 class="text-center">Cadastro de novo Usuário</h2>
+            <form action="#" class="p-2" id="frmCadastro">
+                    <div class="form-group">
+                        <input type="text" name="nomeCompleto" id="nomeCompleto" class="form-control"
+                        placeholder="Nome Completo" required>
+                    </div>
 
-                <div class="from group">
-                    <input type="text" name="nomeCompleto" id="nomeCompleto" class="form-control" placeholder="Nome Completo" required>
-                </div>
+                    <div class="form-group">
+                        <input type="text" name="nomeUsuario" id="nomeUsuario" class="form-control"
+                        placeholder="Nome de Usuário" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="emailUsuario" id="emailUsuario" class="form-control"
+                        placeholder="E-mail do Usuário" required>
+                    </div>
+                    <div class="form-group">
+                    <input type="password" name="senhaUsuario" id="senhaUsuario" class="form-control"
+                        placeholder="Digite sua Senha" required>
+                    </div>
+                    <div class="form-group">
+                    <input type="password" name="senhaConfirma" id="senhaConfirma" class="form-control"
+                        placeholder="Confirme sua senha" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="concordar" id="concordar" class="custom-control-input">
+                            <label for="concordar" class="custom-control-label">Eu concordo com os
+                            <a href="#">Termos e Condições</a>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value=":: Registrar ::" class="btn btn-primary btn-block" id="btnRegistrar">
+                    </div>
+                    <div class="form-group">
+                        <p class="text-center" > Já cadastrado <a href="#" id="btnJáCadastro"> Entrar Aqui</a> </p>
+                    </div>
 
-                <div class="from group">
-                    <input type="text" name="nomeUsuário" id="nomeUsuário" class="form-control" placeholder="Nome de Usuário" required>
-                </div>
-
-                <div class="from group">
-                    <input type="email" name="emailUsuário" id="emailUsuário" class="form-control" placeholder="E-mail de Usuário" requirede>
-                </div>
-
-                <div class="from group">
-                    <input type="password" name="senhaUsuário" id="senhaUsuário" class="form-control" placeholder="Digite sua senha" required>
-                </div>
-
-                <div class="from group">
-                <input type="password" name="senhaConfirmo" id="senhaConfirma" class="form-control" placeholder="Confirme sua senha" required>
-                </div>
-
-                <div class="from group">
-                    <div class="custom-control custom-checkbox">
-                    <input type="checkbox" name="concordar" id="concordar" class="custom-control-imput">
-                    <label for="concordar" class="custom-control-label">Eu concordo com os <a href="#">termos e condições.</a></label>
-                </div>
+                </form>
             </div>
-                <div class="from group"></div>
-                    <input type="submit" value=" Registrar "
-                    class="btn btn-primary btn-block" id="btnRegistrar"
-                    >
-                <div class="from group">
-                    <p class="text-center">Já Cadastrado?
-                    <a href="#" id="btnregistrado">
-                    Entra aqui.
-                    </a>
-                </div>
-
-            </form
-
+        </section>
+    <!-- Formulário de recuperação de Senha --> 
+        <section class="row mb-5">
+        <div class="col-lg-4 offset-lg-4 bg-light runded" id="caixaRecuperarSenha">
+        <h2 class="text-center">Gerar nova senha</h2>
+        <form action="#" id="fromSenha">
+            <div class="form-group">
+                <small class="text-muted">
+            Para gerar uma nova senha, digite seu e-mail e receba as instruções
+                </small>
             </div>
-    </selection>
+            <div class="form-group">
+                <input type="email" name="emailSenha" id="emailSenha" class="form-control" placeholder="E-mail" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value=" :: Enviar E-mail ::" id="btnEnviarEmail" class="btn btn-primary btn-block">
+            </div>
+            <div class="form-group float right">
+                <a href="#" id="btnVoltar">Voltar</a>
+            </div>
 
+
+        </div>
+        
+        </section>
 
     </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+         /* Jquery*/ 
+    $(function(){
+        //Trocar da tela de login para recuperar Senha
+        $("#btnEsqueci").click(function(){
+            $("#caixaLogin").hide();
+            $("#caixaRecuperarSenha").show();
+        });
+        //Voltar para a tela de login
+        $("#btnVoltar").click(function(){
+            $("#caixaRecuperarSenha").hide();
+            $("#caixaLogin").show();
+
+        })
+        //Trocar de tela de login para cadastro de usuário
+            $("#btnCadastrar").click(function(){
+               $("#caixaLogin").hide();
+               $("#caixaCadastro").show();
+            });
+        //Voltar para a Tela de Login
+        $("#btnJáCadastro").click(function(){
+            $("#caixaLogin").show();
+            $("#caixaCadastro").hide();
+        })
+    });
+
+</script>
+
 </body>
 </html>
-
