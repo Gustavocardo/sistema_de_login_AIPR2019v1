@@ -24,9 +24,10 @@ if(isset($_POST['action']) &&
     $sql->bind_param("ss", $nomeUsuario, $senha);
     $sql->execute();
     
-    $busca = $sql->fetch();
-    if($busca != null){
-        echo "ok";
+    $busca = $sql->fetch()
+    $_SESSION['nomeUsuario'] = $nomeUsuario
+    echo "ok";
+    
     }else{
         echo "usuário e senha não conferem";
     }
