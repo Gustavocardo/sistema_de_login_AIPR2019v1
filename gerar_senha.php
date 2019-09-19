@@ -1,5 +1,40 @@
+<?php
+require_once 'configDB.php'; //Conexão com o Banco de Dados
+if (isset($_GET['token']) && strlen($_GET['token']) == 10) {
+    $token = $_GET['token'];
+    $sql = $conecta->prepare("SELECT * from usuario WHERE
+    token = ? AND tempo_de_vida > now()");
+    $sql->bind_param("s", $token);
+    $sql->execute();
+    $resultado = $sql->get_result();
+    if ($resultado->num_rows > 0) {
+        //echo "Nova senha:". @$_POST[senha];
+        //Salvar a nova senha no banco de dados
+        if (isset($_POST['senha'])) {
+            $nova_senha = sha1($_POST['senha']);
+            $confirma_senha = sha1($_POST['csenha']);
+            if ($nova_senha == $confirma_senha) {
+                $sql = $conecta->prepare("UPDATE usuario 
+                SET senha = ?, token='' WHERE token = ?");
+                $sql->bind_param("ss", $nova_senha, $token);
+                $sql->execute();
+                $msg = "Senha alterada com sucesso";
+            } else {
+                $msg = "As senhas não são iguais.";
+            }
+        }
+    } else { //Token sem vida
+        //header('location: index.php');
+        exit();
+    }
+} else { //Sem token ou token diferente de 10 caracteres
+    header('location:index.php'); //Kick da página,
+    exit();
+}
+?>
+
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt_br">
 
 <head>
     <!-- Required meta tags -->
@@ -9,7 +44,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Crie uma nova senha</title>
+    <title>Crie uma nove senha</title>
 </head>
 
 <body>
@@ -25,35 +60,23 @@
                 <form action="" method="post">
                     <div class="form-group">
                         <label for="senha">
-                            Nova Senha
+                            Nova senha
                         </label>
-                        <input type="password" 
-                        name="senha" id="senha" 
-                        class="form-control" 
-                        placeholder="Nova Senha" 
-                        required>
+                        <input type="password" name="senha" id="senha" class="form-control" placeholder="Nova senha" Required>
                     </div>
                     <div class="form-group">
-                        <label for="csenha">
-                            Confirme a Senha
+                        <label for="senha">
+                            Corfime a senha
                         </label>
-                        <input type="password" 
-                        name="csenha" id="csenha" 
-                        class="form-control" 
-                        placeholder="Nova Senha" 
-                        required>
+                        <input type="password" name="csenha" id="csenha" class="form-control" placeholder="Confirme a senha" Required>
                     </div>
                     <div class="form-group">
-                        <input type="submit" 
-                        value=":: Criar nova senha ::"
-                        name="criar" 
-                        class="btn btn-block"
-                        style="background: purple; 
-                                color: white; 
-                                font-weight: bolder;
-                                padding: 10px;
-                                font-size: 22px;
-                                box-shadow: 3px 3px 3px gray;">
+                        <input type="submit" value=":: Criar nova senha ::" name="criar" class="btn btn-block" style="background: lightblue;
+                            color: red; 
+                            font-weight: bolder;
+                            padding: 10px;
+                            font-size: 22px;
+                            box-shadow: 3px 3px 5px blue;">
                     </div>
                 </form>
             </div>
