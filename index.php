@@ -1,3 +1,11 @@
+<?php
+
+session_start();
+if (isset($_SESSION['nomeUsuario']))
+    //Bloqueando usuários logados    
+    header("location: profile.php");
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -37,16 +45,35 @@
                 <form id="formLogin" class="p-2">
 
                     <div class="form-group">
-                        <input type="text" name="nomeUsuario" id="nomeUsuario" class="form-control" placeholder="Nome do usuário" minlength="5" required>
+                        <input type="text" name="nomeUsuario" 
+                        id="nomeUsuario" class="form-control" 
+                        placeholder="Nome do usuário" 
+                        minlength="5" required 
+                        value="<?php 
+                        if(isset($_COOKIE['nomeUsuario']))  
+                            echo $_COOKIE['nomeUsuario'];
+                        ?>">
                     </div>
 
                     <div class="form-group">
-                        <input type="password" name="senhaUsuario" id="senhaUsuario" class="form-control" placeholder="Senha" required minlength="6">
+                        <input type="password" name="senhaUsuario" 
+                        id="senhaUsuario" class="form-control" 
+                        placeholder="Senha" 
+                        required minlength="6"
+                        value="<?php 
+                        if(isset($_COOKIE['senhaUsuario']))  
+                            echo $_COOKIE['senhaUsuario'];
+                        ?>">
                     </div>
 
                     <div class="form-group mt-5">
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" name="lembrar" id="lembrar" class="custom-control-input">
+                            <input type="checkbox" 
+                            name="lembrar" id="lembrar" 
+                            class="custom-control-input" <?php 
+                            if(isset($_COOKIE['nomeUsuario']))  
+                                echo " checked";
+                            ?>>
 
                             <label for="lembrar" class="custom-control-label">
                                 Lembrar de mim.
@@ -87,6 +114,12 @@
 
                     <div class="form-group">
                         <input type="email" name="emailUsuário" id="emailUsuário" class="form-control" placeholder="E-mail de Usuário" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="url" name="urlAvatar" id="urlAvatar" 
+                        class="form-control" 
+                        placeholder="URL para imagem do seu perfil" required>
                     </div>
 
                     <div class="form-group">
@@ -179,6 +212,10 @@
                         success: function(resposta) {
                             $('#alerta').show();
                             $('#resultado').html(resposta);
+                            if (resposta === "ok") {
+                                //Redirecinamento
+                                window.location = "profile.php";
+                            }
                         }
                     });
                 }
@@ -196,9 +233,6 @@
                         success: function(resposta) {
                             $('#alerta').show();
                             $('#resultado').html(resposta);
-                        if(resposta = "ok"){
-                            window.location = "profile.php";
-                         }
                         }
                     });
                 }
@@ -207,13 +241,13 @@
             //Formulário para mudar de senha
             $('#btnEnviarEmail').click(function(e) {
                 let formSenha = document.querySelector('#formSenha');
-                if(formSenha.checkValidity()){
-                    e.preventDefault();//Não recarregar a página
+                if (formSenha.checkValidity()) {
+                    e.preventDefault(); //Não recarregar a página
                     $.ajax({
                         url: 'recebe.php',
                         method: 'post',
-                        data: $('#formSenha').serialize()+'&action=senha',
-                        success: function(resposta){
+                        data: $('#formSenha').serialize() + '&action=senha',
+                        success: function(resposta) {
                             $('#alerta').show();
                             $('#resultado').html(resposta);
                         }

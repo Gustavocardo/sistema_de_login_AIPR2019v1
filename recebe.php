@@ -1,8 +1,10 @@
 <?php
-
+//Inicializando a sessão
 session_start();
+
 //É necessário fazer a conexão com o Banco de Dados
 require_once "configDB.php";
+
 function verificar_entrada($entrada)
 {
     $saida = trim($entrada); //Remove espaços antes e depois
@@ -11,29 +13,63 @@ function verificar_entrada($entrada)
     return $saida;
 }
 
-if(isset($_POST['action']) &&
+if(){
+    isset($_POST['action']) &&
+        $_POST['action'] == 'senha'{
+
+    $emailSenha = verificar_entrada($_POST['emailsenha']);
+    $sql = $conecta->prepare("SELECT idUsuario FROM usuario WHERE email = ?");
+    $sql->bind_param("s", $emailSenha);
+    $sql->execute();
+    $resultado = $sql->get_result();
+    if($resulatdo->num_row > 0){
+        //Existe o usuario no Banco de dados
+        $frase = "a vida e cheia de relevo";
+        $frase_secreta = str_shuffle($frase);
+        $token = subsrt($frase_secreta,0,10);
+        echo "<p>$token<p>";
+
+    }else{
+        echo '<p class="text-dange  r">E-mail não encontrado</p>';
+    } 
+
+}else if(isset($_POST['action']) &&
     $_POST['action'] == 'login'){
-    //Verificação e login do Usuario
+    //Verificação e Login do usuário
     $nomeUsuario = verificar_entrada($_POST['nomeUsuario']);
     $senhaUsuario = verificar_entrada($_POST['senhaUsuario']);
     $senha = sha1($senhaUsuario);
     //Para teste
-    //echo  "<br>Usuário: $nomeUsuario <br> - senha: $senha";
-    $sql = $conecta->prepare("SELECT * FROM usuario WHERE nomeUsuario = ? AND senha = ?");
-
+    //echo "<br>Usuário: $nomeUsuario <br> senha: $senha";
+    $sql = $conecta->prepare("SELECT * FROM usuario WHERE 
+        nomeUsuario = ? AND senha = ?");
     $sql->bind_param("ss", $nomeUsuario, $senha);
     $sql->execute();
-    
-    $busca = $sql->fetch()
-    $_SESSION['nomeUsuario'] = $nomeUsuario
-    echo "ok";
-    
+
+    $busca = $sql->fetch();
+
+    if($busca != null){ 
+        //Colocando o nome do usuário na Sessão
+        $_SESSION['nomeUsuario'] = $nomeUsuario;
+        echo "ok";
+        if(!empty($_POST['lembrar'])){
+            //Se não estiver vazio
+            //Armazenar Login e Senha no Cookie
+            setcookie("nomeUsuario", $nomeUsuario, 
+            time()+(30*24*60*60));
+            setcookie("senhaUsuario", $senhaUsuario,
+            time()+(30*24*60*60)); //30 dias em segundos
+        }else{
+            //Se estiver vazio
+            setcookie("nomeUsuario","");
+            setcookie("senhaUsuario","");
+        }
+
     }else{
-        echo "usuário e senha não conferem";
+        echo "usuário e senha não conferem!";
     }
 
-}else if (
-    isset($_POST['action']) &&
+}else if (isset($_POST['action']) &&
     $_POST['action'] == 'cadastro') {
     //Cadastro de um novo usuário
     //Pegar os campos do formulário
@@ -42,7 +78,8 @@ if(isset($_POST['action']) &&
     $emailUsuario = verificar_entrada($_POST['emailUsuário']);
     $senhaUsuario = verificar_entrada($_POST['senhaUsuário']);
     $senhaConfirma = verificar_entrada($_POST['senhaConfirma']);
-    $concordar = $_POST['concordar'];
+    $urlAvatar = verificar_entrada($_POST['urlAvatar']);
+    //$concordar = $_POST['concordar'];
     $dataCriacao = date("Y-m-d H:i:s");
 
     
@@ -69,10 +106,11 @@ if(isset($_POST['action']) &&
             echo "<p>E-mail já em uso, tente outro</p>";
         }else{ //Cadastro de usuário
             $sql = $conecta->prepare("INSERT into usuario 
-            (nome, nomeUsuario, email, senha, dataCriacao) 
-            values(?, ?, ?, ?, ?)");
-            $sql->bind_param("sssss",$nomeCompleto, $nomeUsuario,
-        $emailUsuario, $senha, $dataCriacao);
+            (nome, nomeUsuario, email, senha, dataCriacao, 
+            avatar_url) 
+            values(?, ?, ?, ?, ?, ?)");
+            $sql->bind_param("ssssss",$nomeCompleto, $nomeUsuario,
+        $emailUsuario, $senha, $dataCriacao, $urlAvatar);
             if($sql->execute()){
                 echo "<p>Registrado com sucesso</p>";
             }else{
